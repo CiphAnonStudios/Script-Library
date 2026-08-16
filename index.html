@@ -1,1 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>RepLog Update Log</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+:root{
+  --bg:#0f0a07;
+  --card:rgba(255,255,255,0.06);
+  --stroke:rgba(255,255,255,0.08);
+  --text:#ffffff;
+  --muted:rgba(255,255,255,0.6);
+  --accent:#d6a15f;
+  --green:#22c55e;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:
+    radial-gradient(circle at top left,#2a1a12,#0b0705 65%);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  padding-bottom:90px;
+}
+
+/* glow */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%,
+    rgba(214,161,95,0.12), transparent 40%);
+  z-index:-1;
+}
+
+/* TOP */
+.top{
+  padding:30px 20px 20px;
+}
+
+.title-card{
+  background:linear-gradient(
+  145deg,
+  rgba(255,255,255,0.08),
+  rgba(255,255,255,0.03));
+
+  border:1px solid var(--stroke);
+  border-radius:28px;
+  padding:28px 24px;
+  position:relative;
+  overflow:hidden;
+}
+
+.title-card::before{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  background:rgba(214,161,95,0.10);
+  border-radius:50%;
+  top:-120px;
+  right:-80px;
+}
+
+.title-card h1{
+  font-size:38px;
+  line-height:1;
+}
+
+.title-card span{
+  color:var(--accent);
+}
+
+.title-card p{
+  color:var(--muted);
+  margin-top:10px;
+  font-size:14px;
+}
+
+/* STATS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  padding:0 20px;
+  margin-top:-8px;
+}
+
+.stat{
+  background:var(--card);
+  border:1px solid var(--stroke);
+  border-radius:20px;
+  padding:18px 12px;
+  text-align:center;
+  backdrop-filter:blur(10px);
+}
+
+.stat i{
+  color:var(--accent);
+  font-size:20px;
+  margin-bottom:8px;
+}
+
+.stat h2{
+  font-size:20px;
+}
+
+.stat p{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:2px;
+}
+
+/* SECTION */
+.section{
+  padding:35px 20px 10px;
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.section-title h2{
+  font-size:22px;
+}
+
+.section-title span{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* UPDATE CARD */
+.update-grid{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.update-card{
+  background:linear-gradient(
+  145deg,
+  rgba(255,255,255,0.08),
+  rgba(255,255,255,0.03));
+
+  border:1px solid var(--stroke);
+  border-radius:24px;
+  overflow:hidden;
+  transition:0.25s;
+}
+
+.update-card:hover{
+  transform:translateY(-2px);
+}
+
+.update-header{
+  padding:20px;
+  cursor:pointer;
+}
+
+.update-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.version-tag{
+  background:rgba(214,161,95,0.15);
+  border:1px solid rgba(214,161,95,0.25);
+  color:var(--accent);
+  padding:7px 12px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.arrow{
+  transition:0.25s;
+  color:var(--muted);
+}
+
+.update-card.active .arrow{
+  transform:rotate(180deg);
+}
+
+.update-header h3{
+  margin-top:14px;
+  font-size:22px;
+}
+
+.date{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:6px;
+}
+
+/* FIXED EXPAND (IMPORTANT) */
+.changes{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.5s ease;
+}
+
+.update-card.active .changes{
+  max-height:5000px; /* FIX: allows full v7.0.0 content */
+}
+
+/* CHANGE LIST */
+.change-list{
+  padding:0 20px 20px 20px;
+  list-style:none;
+}
+
+.change-list li{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  margin-top:12px;
+  color:rgba(255,255,255,0.82);
+  line-height:1.5;
+  font-size:14px;
+}
+
+.change-list li i{
+  color:var(--green);
+  margin-top:3px;
+  font-size:13px;
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(10,10,10,0.92);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--stroke);
+  display:flex;
+  justify-content:space-around;
+  padding:12px 0;
+}
+
+.bottom-nav a{
+  color:var(--muted);
+  text-decoration:none;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  font-size:11px;
+}
+
+.bottom-nav i{
+  font-size:18px;
+}
+
+.bottom-nav a.active{
+  color:var(--accent);
+}
+
+/* footer */
+footer{
+  text-align:center;
+  padding:30px 20px;
+  color:rgba(255,255,255,0.35);
+  font-size:12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<section class="top">
+
+  <div class="title-card">
+
+    <h1>RepLog <span>Updates</span></h1>
+
+    <p>
+      Track new features, UI upgrades,
+      fixes, and challenge improvements.
+    </p>
+
+  </div>
+
+</section>
+
+<section class="stats">
+
+  <div class="stat">
+    <i class="fa-solid fa-code"></i>
+    <h2>9</h2>
+    <p>UPDATES</p>
+  </div>
+
+  <div class="stat">
+    <i class="fa-solid fa-bolt"></i>
+    <h2>v7.0.0</h2>
+    <p>LATEST</p>
+  </div>
+
+  <div class="stat">
+    <i class="fa-solid fa-wrench"></i>
+    <h2>100+</h2>
+    <p>CHANGES</p>
+  </div>
+
+</section>
+
+<section class="section">
+
+  <div class="section-title">
+    <h2>Patch Notes</h2>
+    <span>Tap To Expand</span>
+  </div>
+
+  <div class="update-grid" id="updates"></div>
+
+</section>
+
+<footer>
+  RepLog • Colony Training System
+</footer>
+
+<div class="bottom-nav">
+
+  <a href="index.html">
+    <i class="fa-solid fa-house"></i>
+    Home
+  </a>
+
+  <a href="PushUpChallenge.html">
+    <i class="fa-solid fa-dumbbell"></i>
+    Push
+  </a>
+
+  <a href="CoreChallenge.html">
+    <i class="fa-solid fa-fire"></i>
+    Core
+  </a>
+
+  <a href="CardioChallenge.html">
+    <i class="fa-solid fa-bolt"></i>
+    Cardio
+  </a>
+
+  <a class="active" href="UpdLog.html">
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    Updates
+  </a>
+
+</div>
+
+<script>
+
+const updates = [
+
+{
+version:"v7.0.0",
+title:"UI Rebuild Update",
+date:"5/12/26",
+changes:[
+
+"COMPLETE UI SYSTEM REDESIGN",
+"Fully rebuilt UI across the entire app",
+"Cleaner modern mobile design",
+"Improved glassmorphism styling",
+"Better spacing and layout consistency",
+"Redesigned cards and containers",
+"Updated gradients and color system",
+"Improved visual hierarchy",
+"More polished app-style experience",
+"Smoother navigation flow",
+"Better responsiveness on mobile devices",
+
+"NAVIGATION & ICONS",
+"Added bottom navigation bar",
+"Added navigation icons across the app",
+"Improved page navigation system",
+"Cleaner mobile app layout",
+"Added active page highlighting",
+"Improved accessibility and usability",
+"More app-like navigation experience",
+
+"HOME PAGE IMPROVEMENTS",
+"Fully redesigned homepage",
+"New colony-themed layout",
+"Updated hero section",
+"Redesigned stats cards",
+"Improved challenge section",
+"Added social media section",
+"Added upcoming feature banner",
+"Improved section spacing",
+"Cleaner homepage structure",
+
+"PUSH CHALLENGE UI",
+"Complete push challenge redesign",
+"Improved workout tracker layout",
+"Redesigned progress circle",
+"Updated buttons and controls",
+"Better workout progression display",
+"Improved calendar visuals",
+"Cleaner profile section",
+"Better overall workout experience",
+
+"CORE CHALLENGE UI",
+"Fully updated core challenge layout",
+"Cleaner workout interface",
+"Improved progression display",
+"Updated calendar system",
+"Better workout readability",
+"Improved mobile responsiveness",
+"More polished challenge visuals",
+
+"CARDIO CHALLENGE UI",
+"Complete cardio UI rebuild",
+"Improved workout tracking screen",
+"Cleaner distance and pace display",
+"Redesigned stats section",
+"Better workout controls",
+"Updated calendar visuals",
+"Improved tracking experience",
+"More polished cardio interface",
+
+"UPDATE LOG PAGE",
+"Redesigned update log page",
+"Cleaner patch notes layout",
+"Better readability and organization",
+"Added version tracking support",
+"Improved UI consistency",
+
+"OVERALL IMPROVEMENTS",
+"Improved design consistency across all pages",
+"Better animations and transitions",
+"Cleaner mobile experience",
+"Improved responsiveness",
+"Better visual polish throughout the app",
+"More premium app feel",
+"Enhanced overall user experience",
+
+"VERSION INFO",
+"RepLog V7.0.0 introduces the first complete UI rebuild of the Colony Training System.",
+"More progression systems, unlockables, customization options, and future updates are currently in development."
+
+]
+},
+
+{
+version:"v6.3.2",
+title:"Cardio Rework",
+date:"4/23/26",
+changes:[
+"Run tracking now saves even if page reloads",
+"Cardio progress no longer resets accidentally",
+"New description cards for Core Challenge",
+"New description cards for Cardio Challenge",
+"Updated UI for Update Log button",
+"Spacing fixes for challenge pages"
+]
+},
+
+{
+version:"v6.2.2",
+title:"Home Page Redesign",
+date:"4/17/26",
+changes:[
+"Completely redesigned homepage",
+"Added QR code section",
+"Added new icons",
+"Improved mobile layout",
+"Cleaner navigation system"
+]
+},
+
+{
+version:"v6.1.2",
+title:"Cardio Rework",
+date:"4/13/26",
+changes:[
+"Changed cardio goal from 5mi to 4mi",
+"Added Push Challenge description card",
+"Improved challenge descriptions"
+]
+},
+
+{
+version:"v6.0.2",
+title:"Bug Fixes",
+date:"4/10/26",
+changes:[
+"Fixed text issues in Cardio Challenge",
+"Fixed CSS problems on Update Log button"
+]
+},
+
+{
+version:"v6.0.1",
+title:"Home Improvements",
+date:"4/09/26",
+changes:[
+"Updated descriptions and captions",
+"Cardio calendar now shows days of month"
+]
+},
+
+{
+version:"v6",
+title:"Cardio Challenge Release",
+date:"4/09/26",
+changes:[
+"Added Cardio Challenge page",
+"Added distance tracking",
+"Added pace tracker",
+"Added calorie calculations",
+"Phone vibrates after reaching goal",
+"Added Update Log page",
+"Added collapsible update sections"
+]
+},
+
+{
+version:"v5",
+title:"Core Challenge Release",
+date:"4/08/26",
+changes:[
+"Added Core Challenge",
+"Added local storage saving",
+"Added working calendar",
+"Added XP, levels, and streak system"
+]
+},
+
+{
+version:"v4",
+title:"RepLog Initial Release",
+date:"4/02/26",
+changes:[
+"Added homepage",
+"Added Push Challenge",
+"Added profile system",
+"Added XP and streak tracking",
+"Added working calendar",
+"Added Coming Soon page"
+]
+}
+
+];
+
+const container = document.getElementById("updates");
+
+updates.forEach((u,index)=>{
+
+const card = document.createElement("div");
+card.className = "update-card";
+
+if(index === 0){
+card.classList.add("active");
+}
+
+card.innerHTML = `
+
+<div class="update-header">
+
+<div class="update-top">
+
+<div class="version-tag">
+${u.version}
+</div>
+
+<div class="arrow">
+<i class="fa-solid fa-chevron-down"></i>
+</div>
+
+</div>
+
+<h3>${u.title}</h3>
+
+<div class="date">
+${u.date}
+</div>
+
+</div>
+
+<div class="changes">
+
+<ul class="change-list">
+
+${u.changes.map(change => `
+<li>
+<i class="fa-solid fa-circle-check"></i>
+<span>${change}</span>
+</li>
+`).join("")}
+
+</ul>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+const header = card.querySelector(".update-header");
+
+header.addEventListener("click",()=>{
+
+card.classList.toggle("active");
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
