@@ -1725,7 +1725,7 @@ javascript:javascript:(()=>{let p=document.getElementById("bmPanel");if(p){p.sty
     zIndex: 2147483651, // Now above enemies!
     textShadow: '0 0 4px black'
   });
-  scoreDisplay.textContent = ``Score: ${score}``;
+  scoreDisplay.textContent = ``Score: $ {score}``;
   document.body.appendChild(scoreDisplay);
 
   // Background block 🟩
@@ -1834,7 +1834,7 @@ javascript:javascript:(()=>{let p=document.getElementById("bmPanel");if(p){p.sty
     }
     const type = types[Math.floor(Math.random() * types.length)];
     const enemy = document.createElement('div');
-    enemy.className = ``enemy-${type}``;
+    enemy.className = ``enemy-$ {type}``;
     let enemyZIndex = 2147483648; // Default enemy z-index
     Object.assign(enemy.style, {
       position: 'fixed',
@@ -2098,7 +2098,7 @@ document.body.appendChild(newLogoImage);
           const offsetX = Math.cos(angle) * maxOffset;
           const offsetY = Math.sin(angle) * maxOffset;
 
-          extraText.style.transform = ``translate(${offsetX}px, ${offsetY}px)``;
+          extraText.style.transform = ``translate($ {offsetX}px, $ {offsetY}px)``;
         });
 
         // ✨ Blink effect
@@ -2125,7 +2125,7 @@ document.body.appendChild(newLogoImage);
         gameOverText.textContent = "GAME OVER";
 
         const scoreText = document.createElement('div');
-        scoreText.textContent = ``Final Score: ${score}``;
+        scoreText.textContent = ``Final Score: $ {score}``;
         scoreText.style.fontSize = "24px";
         scoreText.style.marginTop = "20px";
 
@@ -2213,7 +2213,7 @@ document.body.appendChild(newLogoImage);
             e.remove();
             enemies.splice(i, 1);
             score++;
-            scoreDisplay.textContent = ``Score: ${score}``;
+            scoreDisplay.textContent = ``Score: $ {score}``;
           }
           break;
         }
