@@ -1131,6 +1131,14 @@ footer{
 
 }
 
+/* =========================================================
+   TYPING SYSTEM
+========================================================= */
+
+   .typed{font-weight:700;color:var(--accent-2);margin-top:10px;font-family:var(--mono)}
+.typed::after{content:"|";margin-left:6px;color:var(--accent-2);animation:blink 0.8s infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+
 </style>
 </head>
 
@@ -1203,6 +1211,7 @@ footer{
 
       </h1>
 
+       <div class="typed" id="typedLine" aria-hidden="true">The Web</div>
 
       <p>
 
@@ -2270,6 +2279,19 @@ categoryFilter.addEventListener(
 ========================================================= */
 
 renderScripts();
+
+   (function(){
+  const el = document.getElementById('typedLine'); if(!el) return;
+  const lines = ['Got A Whole School A New Ai Blocker :( Not Stopping Me tho xd ','The Web Is A ocean of Teasure','YouTobe: @ToonyTime','Learned How To Hack Cheat And Game Now I Think Im Addicted 13-16','Endless Fun Best Site For It To','Coding Is So Fun'];
+  let i=0,pos=0,forward=true;
+  function step(){
+    const text = lines[i];
+    if(forward){ pos++; el.textContent = text.slice(0,pos); if(pos===text.length){ forward=false; setTimeout(step,900); return } }
+    else{ pos--; el.textContent = text.slice(0,pos); if(pos===0){ forward=true; i=(i+1)%lines.length } }
+    setTimeout(step, forward?60:35 );
+  }
+  step();
+})();
 
 </script>
 
