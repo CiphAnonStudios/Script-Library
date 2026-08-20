@@ -1135,22 +1135,21 @@ footer{
    TYPING SYSTEM
 ========================================================= */
 
+  .typed{font-weight:700;color:var(--accent-2);margin-top:10px;font-family:var(--mono)}
+.typed::after{content:"|";margin-left:6px;color:var(--accent-2);animation:blink 0.8s infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+   
 /* =========================================================
    Logo Display
 ========================================================= */
 
    .Logo {
-      position: absolute;
-      height: 25px;
-      width: 25px;
+      position: fixed;
+      height: 100px;
+      width: 100px;
       top: 50%;
       left: 50%;
    }
-
-
-   .typed{font-weight:700;color:var(--accent-2);margin-top:10px;font-family:var(--mono)}
-.typed::after{content:"|";margin-left:6px;color:var(--accent-2);animation:blink 0.8s infinite}
-@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 
 </style>
 </head>
