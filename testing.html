@@ -1,223 +1,391 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Edge Controls</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Left Edge Controls</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
 
-    html, body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: #111;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    /* The controls */
-    #edge-controls {
-        position: fixed;
-        top: 50%;
-        right: -76px;
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #111;
+}
 
-        transform: translateY(-50%);
 
-        width: 112px;
-        height: 82px;
+/* =========================================
+   MAIN CONTROL PANEL
+   ========================================= */
 
-        display: flex;
-        align-items: center;
-        gap: 6px;
+#edgeControls {
 
-        padding: 5px;
+    position: fixed;
 
-        background: rgba(25, 25, 25, 0.94);
-        border: 2px solid rgba(255,255,255,0.25);
-        border-radius: 20px;
+    left: -62px;
+    top: 50%;
 
-        transition:
-            right 0.22s cubic-bezier(.2,.8,.2,1);
+    transform: translateY(-50%);
 
-        z-index: 9999;
-    }
+    width: 70px;
 
-    /* Half visible */
-    #edge-controls.partial {
-        right: -55px;
-    }
+    padding: 6px;
 
-    /* Fully visible */
-    #edge-controls.full {
-        right: 12px;
-    }
+    display: flex;
+    flex-direction: column;
 
-    .control {
-        position: relative;
+    gap: 6px;
 
-        width: 47px;
-        height: 68px;
+    background: rgba(20, 20, 20, 0.88);
 
-        border: none;
-        border-radius: 16px;
+    border: 2px solid rgba(255,255,255,0.32);
 
-        background: #f5f5f5;
-        color: #171717;
+    border-radius: 22px;
 
-        cursor: pointer;
+    z-index: 99999;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    transition:
+        left 0.22s cubic-bezier(.2,.8,.2,1);
+}
 
-        font-size: 27px;
-        font-weight: bold;
 
-        transition:
-            transform 0.12s ease,
-            background 0.12s ease;
-    }
+/* Partially visible */
 
-    .control:hover {
-        background: white;
-        transform: scale(1.04);
-    }
+#edgeControls.partial {
+    left: -40px;
+}
 
-    /* Tooltip */
-    .tooltip {
-        position: absolute;
 
-        right: 57px;
-        top: 50%;
+/* Fully visible */
 
-        transform: translateY(-50%);
+#edgeControls.full {
+    left: 10px;
+}
 
-        padding: 7px 10px;
 
-        background: rgba(15,15,15,.96);
-        color: white;
+/* =========================================
+   BUTTON
+   ========================================= */
 
-        border-radius: 7px;
+.controlButton {
 
-        font-family: Arial, sans-serif;
-        font-size: 13px;
-        font-weight: normal;
+    position: relative;
 
-        white-space: nowrap;
+    width: 54px;
+    height: 54px;
 
-        opacity: 0;
-        pointer-events: none;
+    flex-shrink: 0;
 
-        transition: opacity .15s ease;
-    }
+    border: none;
 
-    .control:hover .tooltip {
-        opacity: 1;
-    }
+    border-radius: 17px;
 
-    /* Four-direction icon */
-    .move-icon {
-        width: 25px;
-        height: 25px;
+    background: #eeeeee;
 
-        position: relative;
-    }
+    color: #222;
 
-    .move-icon::before {
-        content: "✦";
+    display: flex;
 
-        position: absolute;
-        left: 50%;
-        top: 50%;
+    align-items: center;
+    justify-content: center;
 
-        transform: translate(-50%, -50%);
+    font-size: 23px;
 
-        font-size: 27px;
-    }
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.12s ease,
+        background 0.12s ease;
+}
+
+
+.controlButton:hover {
+
+    background: #ffffff;
+
+    transform: scale(1.04);
+}
+
+
+/* =========================================
+   TOOLTIP
+   ========================================= */
+
+.tooltip {
+
+    position: absolute;
+
+    left: 64px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    white-space: nowrap;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    background: rgba(20,20,20,0.96);
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 14px;
+
+    font-weight: normal;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: opacity 0.15s ease;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+
+.controlButton:hover .tooltip {
+
+    opacity: 1;
+}
+
+
+/* =========================================
+   ICONS
+   ========================================= */
+
+.icon {
+
+    width: 26px;
+    height: 26px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 23px;
+}
+
+
+/* Four direction icon */
+
+.movementIcon {
+
+    font-size: 22px;
+
+    line-height: 1;
+
+}
+
+
+/* =========================================
+   DEMO BACKGROUND
+   ========================================= */
+
+#content {
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+}
+
 </style>
 </head>
 
+
 <body>
 
-<div id="edge-controls">
 
-    <button class="control" id="up">
-        ▲
-        <span class="tooltip">Move Up</span>
+<div id="content">
+    Move your mouse toward the left edge
+</div>
+
+
+<!-- =========================================
+     CONTROL PANEL
+     ========================================= -->
+
+<div id="edgeControls">
+
+
+    <!-- BUTTON 1 -->
+
+    <button class="controlButton">
+
+        <span class="icon">▲</span>
+
+        <span class="tooltip">
+            Move Up
+        </span>
+
     </button>
 
-    <button class="control" id="movement">
-        <span class="move-icon"></span>
-        <span class="tooltip">Movement</span>
+
+    <!-- BUTTON 2 -->
+
+    <button class="controlButton">
+
+        <span class="icon movementIcon">✣</span>
+
+        <span class="tooltip">
+            Movement
+        </span>
+
     </button>
+
+
+    <!-- BUTTON 3 -->
+
+    <button class="controlButton">
+
+        <span class="icon">↻</span>
+
+        <span class="tooltip">
+            Rotate
+        </span>
+
+    </button>
+
+
+    <!-- BUTTON 4 -->
+
+    <button class="controlButton">
+
+        <span class="icon">⚙</span>
+
+        <span class="tooltip">
+            Settings
+        </span>
+
+    </button>
+
+
+    <!-- BUTTON 5 -->
+
+    <button class="controlButton">
+
+        <span class="icon">?</span>
+
+        <span class="tooltip">
+            Help
+        </span>
+
+    </button>
+
 
 </div>
 
 
+
 <script>
-    const controls = document.getElementById("edge-controls");
 
-    let hideTimeout;
+/* =========================================
+   EDGE CONTROL LOGIC
+   ========================================= */
 
-    /*
-     * Mouse reaches the right side:
-     * show the controls halfway.
-     */
-    document.addEventListener("mousemove", (event) => {
+const controls =
+    document.getElementById("edgeControls");
 
-        const distanceFromRight =
-            window.innerWidth - event.clientX;
-
-        if (distanceFromRight <= 45) {
-            clearTimeout(hideTimeout);
-
-            controls.classList.remove("full");
-            controls.classList.add("partial");
-        }
-    });
+let hideTimer;
 
 
-    /*
-     * Mouse enters the visible controls:
-     * show the entire UI.
-     */
-    controls.addEventListener("mouseenter", () => {
+/*
+    Mouse approaches the LEFT edge
+*/
 
-        clearTimeout(hideTimeout);
+document.addEventListener("mousemove", (event) => {
+
+    const distanceFromLeft = event.clientX;
+
+    if (distanceFromLeft <= 45) {
+
+        clearTimeout(hideTimer);
+
+        controls.classList.remove("full");
+
+        controls.classList.add("partial");
+    }
+
+});
+
+
+/*
+    Mouse enters the visible controls
+*/
+
+controls.addEventListener("mouseenter", () => {
+
+    clearTimeout(hideTimer);
+
+    controls.classList.remove("partial");
+
+    controls.classList.add("full");
+
+});
+
+
+/*
+    Mouse leaves the controls
+*/
+
+controls.addEventListener("mouseleave", () => {
+
+    hideTimer = setTimeout(() => {
 
         controls.classList.remove("partial");
-        controls.classList.add("full");
-    });
+
+    }, 150);
+
+});
 
 
-    /*
-     * Mouse leaves the controls:
-     * hide them.
-     */
-    controls.addEventListener("mouseleave", () => {
+/*
+    Prevent accidental hiding while
+    the mouse is still close to the edge
+*/
 
-        hideTimeout = setTimeout(() => {
+document.addEventListener("mousemove", (event) => {
+
+    if (
+        event.clientX > 45 &&
+        !controls.matches(":hover")
+    ) {
+
+        clearTimeout(hideTimer);
+
+        hideTimer = setTimeout(() => {
 
             controls.classList.remove("partial");
             controls.classList.remove("full");
 
-        }, 150);
-    });
+        }, 250);
 
+    }
 
-    /*
-     * Button actions
-     */
-    document.getElementById("up").addEventListener("click", () => {
-        console.log("Move Up");
-    });
+});
 
-
-    document.getElementById("movement").addEventListener("click", () => {
-        console.log("Movement");
-    });
 </script>
 
 </body>
