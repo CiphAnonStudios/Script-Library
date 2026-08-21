@@ -1,133 +1,224 @@
-(() => {
-    // Create the control container
-    const controls = document.createElement("div");
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Edge Controls</title>
 
-    controls.style.cssText = `
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #111;
+    }
+
+    /* The controls */
+    #edge-controls {
         position: fixed;
-        right: -75px;
         top: 50%;
+        right: -76px;
+
         transform: translateY(-50%);
-        width: 105px;
+
+        width: 112px;
         height: 82px;
+
         display: flex;
         align-items: center;
         gap: 6px;
+
         padding: 5px;
-        background: rgba(25, 25, 25, 0.9);
-        border: 2px solid rgba(255,255,255,0.35);
-        border-radius: 22px;
-        transition: right 0.2s ease;
-        z-index: 999999;
+
+        background: rgba(25, 25, 25, 0.94);
+        border: 2px solid rgba(255,255,255,0.25);
+        border-radius: 20px;
+
+        transition:
+            right 0.22s cubic-bezier(.2,.8,.2,1);
+
+        z-index: 9999;
+    }
+
+    /* Half visible */
+    #edge-controls.partial {
+        right: -55px;
+    }
+
+    /* Fully visible */
+    #edge-controls.full {
+        right: 12px;
+    }
+
+    .control {
+        position: relative;
+
+        width: 47px;
+        height: 68px;
+
+        border: none;
+        border-radius: 16px;
+
+        background: #f5f5f5;
+        color: #171717;
+
+        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 27px;
+        font-weight: bold;
+
+        transition:
+            transform 0.12s ease,
+            background 0.12s ease;
+    }
+
+    .control:hover {
+        background: white;
+        transform: scale(1.04);
+    }
+
+    /* Tooltip */
+    .tooltip {
+        position: absolute;
+
+        right: 57px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        padding: 7px 10px;
+
+        background: rgba(15,15,15,.96);
+        color: white;
+
+        border-radius: 7px;
+
         font-family: Arial, sans-serif;
-    `;
+        font-size: 13px;
+        font-weight: normal;
 
-    // Create a button
-    function createButton(icon, text) {
-        const button = document.createElement("button");
+        white-space: nowrap;
 
-        button.style.cssText = `
-            position: relative;
-            width: 45px;
-            height: 68px;
-            border: 0;
-            border-radius: 17px;
-            background: #f4f4f4;
-            color: #111;
-            font-size: 27px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        `;
+        opacity: 0;
+        pointer-events: none;
 
-        button.innerHTML = `
-            ${icon}
-            <span style="
-                position: absolute;
-                right: 58px;
-                top: 50%;
-                transform: translateY(-50%);
-                white-space: nowrap;
-                background: rgba(20,20,20,.95);
-                color: white;
-                padding: 7px 10px;
-                border-radius: 8px;
-                font-size: 13px;
-                font-weight: normal;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity .15s;
-            ">${text}</span>
-        `;
-
-        const tooltip = button.querySelector("span");
-
-        button.addEventListener("mouseenter", () => {
-            tooltip.style.opacity = "1";
-        });
-
-        button.addEventListener("mouseleave", () => {
-            tooltip.style.opacity = "0";
-        });
-
-        return button;
+        transition: opacity .15s ease;
     }
 
-    // Buttons
-    const upButton = createButton("▲", "Move Up");
-
-    const movementButton = createButton(
-        "✥",
-        "Movement"
-    );
-
-    controls.appendChild(upButton);
-    controls.appendChild(movementButton);
-
-    document.body.appendChild(controls);
-
-    // Show partially
-    function showPartial() {
-        controls.style.right = "-55px";
+    .control:hover .tooltip {
+        opacity: 1;
     }
 
-    // Show completely
-    function showFull() {
-        controls.style.right = "12px";
+    /* Four-direction icon */
+    .move-icon {
+        width: 25px;
+        height: 25px;
+
+        position: relative;
     }
 
-    // Hide
-    function hide() {
-        controls.style.right = "-75px";
-    }
+    .move-icon::before {
+        content: "✦";
 
-    // Detect mouse approaching the right side
+        position: absolute;
+        left: 50%;
+        top: 50%;
+
+        transform: translate(-50%, -50%);
+
+        font-size: 27px;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="edge-controls">
+
+    <button class="control" id="up">
+        ▲
+        <span class="tooltip">Move Up</span>
+    </button>
+
+    <button class="control" id="movement">
+        <span class="move-icon"></span>
+        <span class="tooltip">Movement</span>
+    </button>
+
+</div>
+
+
+<script>
+    const controls = document.getElementById("edge-controls");
+
+    let hideTimeout;
+
+    /*
+     * Mouse reaches the right side:
+     * show the controls halfway.
+     */
     document.addEventListener("mousemove", (event) => {
+
         const distanceFromRight =
             window.innerWidth - event.clientX;
 
         if (distanceFromRight <= 45) {
-            showPartial();
+            clearTimeout(hideTimeout);
+
+            controls.classList.remove("full");
+            controls.classList.add("partial");
         }
     });
 
-    // When mouse reaches the visible part
+
+    /*
+     * Mouse enters the visible controls:
+     * show the entire UI.
+     */
     controls.addEventListener("mouseenter", () => {
-        showFull();
+
+        clearTimeout(hideTimeout);
+
+        controls.classList.remove("partial");
+        controls.classList.add("full");
     });
 
-    // When mouse leaves
+
+    /*
+     * Mouse leaves the controls:
+     * hide them.
+     */
     controls.addEventListener("mouseleave", () => {
-        hide();
+
+        hideTimeout = setTimeout(() => {
+
+            controls.classList.remove("partial");
+            controls.classList.remove("full");
+
+        }, 150);
     });
 
-    // Example actions
-    upButton.addEventListener("click", () => {
+
+    /*
+     * Button actions
+     */
+    document.getElementById("up").addEventListener("click", () => {
         console.log("Move Up");
     });
 
-    movementButton.addEventListener("click", () => {
+
+    document.getElementById("movement").addEventListener("click", () => {
         console.log("Movement");
     });
-})();
+</script>
+
+</body>
+</html>
