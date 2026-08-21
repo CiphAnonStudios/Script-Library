@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -18,19 +17,19 @@ html, body {
 }
 
 
-/* ================================
+/* =========================
    PANEL
-   ================================ */
+   ========================= */
 
 #panel {
     position: fixed;
 
-    left: -70px;
+    left: -82px;
     top: 50%;
 
     transform: translateY(-50%);
 
-    width: 80px;
+    width: 82px;
 
     padding: 6px;
 
@@ -38,54 +37,44 @@ html, body {
     flex-direction: column;
     gap: 6px;
 
-    background: rgba(25, 25, 25, 0.92);
+    background: rgba(25, 25, 25, 0.94);
 
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255,255,255,0.35);
 
     border-radius: 22px;
 
-    z-index: 10000;
+    z-index: 999999;
 
-    transition:
-        left 0.22s cubic-bezier(.2, .8, .2, 1);
+    transition: left 0.25s ease;
 }
 
 
-/*
-    HALF VISIBLE
-
-    Panel is 80px wide.
-    40px is visible.
-*/
+/* Half of panel visible */
 
 #panel.partial {
-    left: -40px;
+    left: -41px;
 }
 
 
-/*
-    COMPLETELY VISIBLE
-*/
+/* Completely visible */
 
 #panel.full {
     left: 10px;
 }
 
 
-/* ================================
+/* =========================
    BUTTONS
-   ================================ */
+   ========================= */
 
 .button {
     position: relative;
 
-    width: 64px;
-    height: 54px;
-
-    flex-shrink: 0;
+    width: 66px;
+    height: 52px;
 
     border: none;
-    border-radius: 17px;
+    border-radius: 16px;
 
     background: #eeeeee;
 
@@ -95,12 +84,12 @@ html, body {
     align-items: center;
     justify-content: center;
 
-    font-size: 23px;
+    font-size: 22px;
     font-weight: bold;
 
     cursor: pointer;
 
-    transition: transform .12s ease;
+    transition: transform 0.12s ease;
 }
 
 .button:hover {
@@ -108,9 +97,9 @@ html, body {
 }
 
 
-/* ================================
+/* =========================
    TOOLTIP
-   ================================ */
+   ========================= */
 
 .tooltip {
     position: absolute;
@@ -122,14 +111,13 @@ html, body {
 
     padding: 7px 11px;
 
-    background: rgba(20,20,20,.96);
+    background: rgba(20,20,20,0.96);
 
     color: white;
 
-    border-radius: 8px;
+    border-radius: 7px;
 
     font-family: Arial, sans-serif;
-
     font-size: 13px;
     font-weight: normal;
 
@@ -139,7 +127,7 @@ html, body {
 
     pointer-events: none;
 
-    transition: opacity .15s ease;
+    transition: opacity 0.15s;
 }
 
 .button:hover .tooltip {
@@ -147,18 +135,9 @@ html, body {
 }
 
 
-/* ================================
-   ICONS
-   ================================ */
-
-.icon {
-    font-size: 23px;
-}
-
-
-/* ================================
+/* =========================
    DEMO
-   ================================ */
+   ========================= */
 
 #content {
     width: 100%;
@@ -171,45 +150,41 @@ html, body {
     color: white;
     font-family: Arial, sans-serif;
 }
-
 </style>
 </head>
 
 
 <body>
 
-
 <div id="content">
-    Move your mouse toward the left edge
+    Move your mouse to the left side
 </div>
 
-
-<!-- PANEL -->
 
 <div id="panel">
 
     <button class="button">
-        <span class="icon">▲</span>
+        ▲
         <span class="tooltip">Move Up</span>
     </button>
 
     <button class="button">
-        <span class="icon">✣</span>
+        ✣
         <span class="tooltip">Movement</span>
     </button>
 
     <button class="button">
-        <span class="icon">↻</span>
+        ↻
         <span class="tooltip">Rotate</span>
     </button>
 
     <button class="button">
-        <span class="icon">☰</span>
+        ☰
         <span class="tooltip">Menu</span>
     </button>
 
     <button class="button">
-        <span class="icon">⚙</span>
+        ⚙
         <span class="tooltip">Settings</span>
     </button>
 
@@ -220,128 +195,118 @@ html, body {
 
 const panel = document.getElementById("panel");
 
-let state = "hidden";
 let hideTimer = null;
 
 
-/* =================================
-   SHOW HALF
-   ================================= */
+/* =========================
+   MOUSE DETECTION
+   ========================= */
 
-function showPartial() {
-
-    clearTimeout(hideTimer);
-
-    if (state !== "full") {
-
-        state = "partial";
-
-        panel.classList.remove("full");
-
-        panel.classList.add("partial");
-    }
-}
-
-
-/* =================================
-   SHOW EVERYTHING
-   ================================= */
-
-function showFull() {
-
-    clearTimeout(hideTimer);
-
-    state = "full";
-
-    panel.classList.remove("partial");
-
-    panel.classList.add("full");
-}
-
-
-/* =================================
-   HIDE
-   ================================= */
-
-function hidePanel() {
-
-    clearTimeout(hideTimer);
-
-    hideTimer = setTimeout(() => {
-
-        state = "hidden";
-
-        panel.classList.remove("partial");
-        panel.classList.remove("full");
-
-    }, 150);
-}
-
-
-/* =================================
-   MOUSE MOVEMENT
-   ================================= */
-
-document.addEventListener("mousemove", (event) => {
+document.addEventListener("mousemove", function(event) {
 
     const mouseX = event.clientX;
 
     /*
-       Mouse is within 25px of
-       the left edge.
+     * LEFT EDGE TRIGGER
+     *
+     * Anything within 100px of the
+     * left side makes the panel
+     * partially appear.
+     */
 
-       Reveal the panel halfway.
-    */
+    if (mouseX <= 100) {
 
-    if (mouseX <= 25) {
+        clearTimeout(hideTimer);
 
-        showPartial();
+        panel.classList.remove("full");
+
+        panel.classList.add("partial");
 
         return;
     }
 
 
     /*
-       If the mouse is outside the
-       panel and has moved away from
-       the left edge, hide it.
-    */
+     * If the mouse is actually
+     * over the panel, keep it open.
+     */
 
-    if (!panel.matches(":hover")) {
+    if (panel.matches(":hover")) {
 
-        if (mouseX > 55) {
+        clearTimeout(hideTimer);
 
-            hidePanel();
+        panel.classList.remove("partial");
+
+        panel.classList.add("full");
+
+        return;
+    }
+
+
+    /*
+     * Mouse moved away from both
+     * the edge and the panel.
+     */
+
+    clearTimeout(hideTimer);
+
+    hideTimer = setTimeout(function() {
+
+        panel.classList.remove("partial");
+        panel.classList.remove("full");
+
+    }, 200);
+
+});
+
+
+/* =========================
+   MOUSE ENTERS PANEL
+   ========================= */
+
+panel.addEventListener("mouseenter", function() {
+
+    clearTimeout(hideTimer);
+
+    panel.classList.remove("partial");
+
+    panel.classList.add("full");
+
+});
+
+
+/* =========================
+   MOUSE LEAVES PANEL
+   ========================= */
+
+panel.addEventListener("mouseleave", function() {
+
+    clearTimeout(hideTimer);
+
+    /*
+     * Immediately return to the
+     * half-visible position.
+     */
+
+    panel.classList.remove("full");
+
+    panel.classList.add("partial");
+
+
+    /*
+     * Then hide it after the mouse
+     * has moved away from the edge.
+     */
+
+    hideTimer = setTimeout(function() {
+
+        if (!panel.matches(":hover")) {
+
+            panel.classList.remove("partial");
 
         }
 
-    }
-
-});
-
-
-/* =================================
-   MOUSE ENTERS THE VISIBLE HALF
-   ================================= */
-
-panel.addEventListener("mouseenter", () => {
-
-    showFull();
-
-});
-
-
-/* =================================
-   MOUSE LEAVES PANEL
-   ================================= */
-
-panel.addEventListener("mouseleave", () => {
-
-    /*
-       Go back to half-visible first.
-    */
-
-    showPartial();
+    }, 500);
 
 });
 
