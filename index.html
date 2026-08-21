@@ -1156,27 +1156,12 @@ footer{
 ========================================================= */
 
    
-   .image-container {
+#myImage {
   width: 400px;
   height: 300px;
-  overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
 }
 
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Keeps aspect ratio clean without warping */
-  transition: opacity 0.3s ease; /* Adds a smooth transition effect */
-}
-
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
 
 </style>
 </head>
@@ -1210,14 +1195,8 @@ button {
 
      <img class="Logo" src="Images/Logo.png">
 
-     <!-- Image Swapper -->
-     <div class="image-container">
-  <!-- Set your first image as the default src -->
-  <img id="myImage" src="Images/17.png" alt="First Image">
-</div>
-
-<button id="toggleButton">Switch Image</button>
-
+     <!-- HTML -->
+<img id="myImage" src="Images/17.png" alt="Slideshow Image">
 
     <div class="nav-links">
 
@@ -2345,22 +2324,19 @@ renderScripts();
 /* =========================================================
    Images Swapper
 ========================================================= */
-const imageElement = document.getElementById('myImage');
-const toggleButton = document.getElementById('toggleButton');
+// JavaScript
+const images = ["Images/17.png", "Images/18.png"];
+let currentIndex = 0;
+const imgElement = document.getElementById("myImage");
 
-// Define your two image paths
-const firstImage = "Images/17.png";
-const secondImage = "Images/18.png";
+function switchImage() {
+  currentIndex = (currentIndex + 1) % images.length;
+  imgElement.src = images[currentIndex];
+}
 
-// Listen for a button click
-toggleButton.addEventListener('click', () => {
-  // Check if the current image src ends with the first image filename
-  if (imageElement.src.includes(firstImage)) {
-    imageElement.src = secondImage;
-  } else {
-    imageElement.src = firstImage;
-  }
-});
+// Switches every 3000 milliseconds (3 seconds)
+setInterval(switchImage, 3000);
+
 
 
 </script>
