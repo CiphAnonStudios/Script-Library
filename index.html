@@ -1151,6 +1151,33 @@ footer{
     transform: rotate(344deg);
 }
 
+/* =========================================================
+   Image Swapper
+========================================================= */
+
+   
+   .image-container {
+  width: 400px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Keeps aspect ratio clean without warping */
+  transition: opacity 0.3s ease; /* Adds a smooth transition effect */
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 </style>
 </head>
 
@@ -1182,6 +1209,15 @@ footer{
     </div>
 
      <img class="Logo" src="Images/Logo.png">
+
+     <!-- Image Swapper -->
+     <div class="image-container">
+  <!-- Set your first image as the default src -->
+  <img id="myImage" src="Images/17.png" alt="First Image">
+</div>
+
+<button id="toggleButton">Switch Image</button>
+
 
     <div class="nav-links">
 
@@ -2305,6 +2341,27 @@ renderScripts();
   }
   step();
 })();
+
+/* =========================================================
+   Images Swapper
+========================================================= */
+const imageElement = document.getElementById('myImage');
+const toggleButton = document.getElementById('toggleButton');
+
+// Define your two image paths
+const firstImage = "Images/17.png";
+const secondImage = "Images/18.png";
+
+// Listen for a button click
+toggleButton.addEventListener('click', () => {
+  // Check if the current image src ends with the first image filename
+  if (imageElement.src.includes(firstImage)) {
+    imageElement.src = secondImage;
+  } else {
+    imageElement.src = firstImage;
+  }
+});
+
 
 </script>
 
