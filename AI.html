@@ -1,0 +1,241 @@
+<html lang="en"><head><script nonce="Mw8sdoo/+IZsf/+5GR94zA" src="https://ai.rippledesign.co/__DLD__fed9a1a7ac839431bc758270898f28030fee4f9a619e8b89601b34027ee66c37/resources/setup.js"></script><script nonce="pQj2qULt0t4cZfAGiI0mtw" src="https://ai.rippledesign.co/__DLD__fed9a1a7ac839431bc758270898f28030fee4f9a619e8b89601b34027ee66c37/resources/frontend.min.js" server="https://localhost:49193" id="__dld-frontend__" async="" defer=""></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#3730a3">
+    <title>Ripple AI</title>
+    <meta name="description" content="Free LLM chat from Ripple Design. Llama 3.3 70B and Qwen 3 235B via Cloudflare, Groq, and Cerebras. No signup, no history saved.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+    <link rel="stylesheet" href="/chat.css?v=1787055626004">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async="" defer=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@13.0.3/marked.min.js" defer=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js" defer=""></script>
+  <style></style></head>
+  <body class="state-welcome" data-new-gr-c-s-check-loaded="14.1322.0" data-gr-ext-installed="" data-gr-ext-go-mode="" data-gr-aaa-loaded="14.1322.0" data-gr-aaa-notch-connection-id="1787277220111-0.6247245530519735" data-gr-agent-presence-bridge-connection-id="1787277221361-0.19777779334944368" data-new-gr-c-s-loaded="14.1322.0">
+    <header class="topbar" aria-label="Ripple AI">
+      <a class="wordmark" href="/">Ripple <em>AI</em></a>
+      <nav class="topbar-nav" id="topbar-nav" aria-label="Primary" hidden="">
+        <a href="/" class="nav-link is-active" aria-current="page">Chat</a>
+        <a href="/usage/" class="nav-link">Dashboard</a>
+      </nav>
+      <div class="topbar-right">
+        <button type="button" class="new-chat-btn" id="new-chat-btn" title="Start a new conversation">
+          <svg viewBox="0 0 16 16" class="icon" aria-hidden="true">
+            <path d="M12 8.5V12a1.5 1.5 0 01-1.5 1.5h-7A1.5 1.5 0 012 12V5a1.5 1.5 0 011.5-1.5H7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M11.5 1.6l2.9 2.9-6.4 6.4H5.1V8L11.5 1.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span>New chat</span>
+        </button>
+        <a class="signin-btn" id="signin-btn" href="/auth/google?return=%2Fdashboard%2F">Sign in</a>
+        <div class="user-menu" id="user-menu" hidden="">
+          <button type="button" class="user-menu-trigger" id="user-menu-trigger" aria-haspopup="menu" aria-expanded="false">
+            <img class="user-avatar" id="user-menu-avatar" alt="" hidden="" referrerpolicy="no-referrer">
+            <span class="user-menu-name" id="user-menu-name">—</span>
+            <svg viewBox="0 0 12 12" class="user-menu-chev" aria-hidden="true"><path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </button>
+          <div class="user-menu-dropdown" id="user-menu-dropdown" role="menu" hidden="">
+            <div class="user-menu-email" id="user-menu-email">—</div>
+            <button type="button" class="user-menu-item" id="signout-btn" role="menuitem">Sign out</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sidebar chrome injected by /shared/sidebar.js (single source of truth
+         shared with the dashboard). RippleSidebar.mount() runs synchronously
+         on script execution and replaces this placeholder with the toggle
+         button + backdrop + <aside>. -->
+    <div id="ripple-sidebar-root"><button id="sidebar-toggle-btn" class="sidebar-toggle" type="button" hidden="" aria-label="Toggle sidebar" title="Toggle sidebar"><span class="icon-collapse"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 4L6 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span class="icon-expand"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></button><div id="sidebar-backdrop" class="sidebar-backdrop" hidden=""></div><aside id="sidebar" class="sidebar" hidden="" aria-label="Conversation history"><div class="sidebar-brand"><a href="/" class="sidebar-wordmark">Ripple <em>AI</em></a><button type="button" class="sidebar-collapse-btn" id="sidebar-collapse-inline-btn" title="Collapse sidebar" aria-label="Collapse sidebar"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 4L6 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></div><div class="sidebar-head"><button id="sidebar-new-chat-btn" class="sidebar-new-chat" type="button"><svg viewBox="0 0 16 16" aria-hidden="true" class="sidebar-new-chat-icon"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>New chat</button><a href="/usage/" class="sidebar-nav-link"><svg viewBox="0 0 16 16" aria-hidden="true" class="sidebar-nav-icon"><rect x="2" y="9" width="3" height="5" rx="0.6" fill="currentColor"></rect><rect x="6.5" y="6" width="3" height="8" rx="0.6" fill="currentColor"></rect><rect x="11" y="3" width="3" height="11" rx="0.6" fill="currentColor"></rect></svg>Usage</a><a href="/settings/" class="sidebar-nav-link"><svg viewBox="0 0 16 16" aria-hidden="true" class="sidebar-nav-icon"><circle cx="8" cy="8" r="2.1" fill="none" stroke="currentColor" stroke-width="1.4"></circle><path d="M8 1.6v1.4M8 13v1.4M14.4 8H13M3 8H1.6M12.5 3.5l-1 1M4.5 11.5l-1 1M12.5 12.5l-1-1M4.5 4.5l-1-1" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path></svg>Settings</a><a href="/workers/" class="sidebar-nav-link"><svg viewBox="0 0 16 16" aria-hidden="true" class="sidebar-nav-icon"><path d="M1.5 8h2.5l1.4-4 2.6 8 1.4-4h3.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Workers</a></div><nav id="conversations-list" class="conv-list" aria-label="Past conversations"></nav><div class="sidebar-empty" hidden="">No past conversations yet.</div><div class="sidebar-foot"><div class="user-menu sidebar-user-menu" id="sidebar-user-menu" hidden=""><button type="button" class="sidebar-user-trigger" id="sidebar-user-trigger" aria-haspopup="menu" aria-expanded="false"><img class="user-avatar" id="sidebar-avatar" alt="" hidden="" referrerpolicy="no-referrer"><span class="sidebar-user-name" id="sidebar-user-name">Account</span><svg viewBox="0 0 12 12" class="user-menu-chev" aria-hidden="true"><path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><div class="user-menu-dropdown sidebar-user-dropdown" id="sidebar-user-dropdown" role="menu" hidden=""><div class="user-menu-email" id="sidebar-user-email">—</div><button type="button" class="user-menu-item" id="sidebar-signout-btn" role="menuitem">Sign out</button></div></div></div></aside></div>
+
+    <main id="main">
+      <section id="welcome" class="welcome">
+        <p class="hero-sub">Free LLM chat. Ask anything. Nothing is saved.</p>
+
+        <div id="composer-slot-welcome" class="composer-slot"><div id="composer">
+        <div id="turnstile-container" class="turnstile-container"><div><input type="hidden" name="cf-turnstile-response" id="cf-chl-widget-0vxpp_response"></div></div>
+        <form id="compose" class="composer">
+          <!-- Staged-image thumbnails (vision). JS populates chips here above
+               the textarea; cleared after a successful send. Empty + hidden by
+               default so the text-only layout is unchanged. -->
+          <div id="image-strip" class="image-strip" hidden=""></div>
+          <textarea id="input" rows="1" placeholder="Ask anything…" maxlength="2000" autocomplete="off" spellcheck="true" required=""></textarea>
+          <!-- Hidden file input driving the 📎 attach button. accept=image/*,
+               multiple; wired in chat.js. -->
+          <input id="image-input" type="file" accept="image/*" multiple="" hidden="" aria-hidden="true" tabindex="-1">
+          <div class="composer-controls">
+            <div class="picker-group">
+              <!-- Mode picker. Custom popover (not <select>) so each row can
+                   carry a short description line. Fast/Balanced/Smart map to
+                   server-side Auto modes; Think maps to an explicit pick of
+                   the reasoning model. See chat.js → MODES. -->
+              <div class="picker mode-picker-wrap">
+                <button id="mode-picker" type="button" class="mode-picker-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Mode">
+                  <span class="mode-picker-current">Balanced</span>
+                </button>
+                <ul id="mode-picker-menu" class="mode-picker-menu" role="listbox" aria-label="Mode" hidden=""><li class="mode-option" role="option" data-mode="fast" aria-selected="false"><span class="mode-option-text"><span class="mode-option-label">Fast</span><span class="mode-option-desc">Quickest answers · 70B models</span></span><span class="mode-option-check" aria-hidden="true">✓</span></li><li class="mode-option is-selected is-active" role="option" data-mode="balanced" aria-selected="true"><span class="mode-option-text"><span class="mode-option-label">Balanced</span><span class="mode-option-desc">Default · best for most questions</span></span><span class="mode-option-check" aria-hidden="true">✓</span></li><li class="mode-option" role="option" data-mode="smart" aria-selected="false"><span class="mode-option-text"><span class="mode-option-label">Smart</span><span class="mode-option-desc">Qwen 3 235B · for harder prompts</span></span><span class="mode-option-check" aria-hidden="true">✓</span></li><li class="mode-option" role="option" data-mode="think" aria-selected="false"><span class="mode-option-text"><span class="mode-option-label">Think</span><span class="mode-option-desc">Reasoning model · 4–15s · best for math, code, logic</span></span><span class="mode-option-check" aria-hidden="true">✓</span></li></ul>
+              </div>
+              <!-- Web search toggle. When on, the server runs the research
+                   fan-out chain (planner → search × N → synthesizer) instead
+                   of a single LLM call. Overrides the mode picker — research
+                   mode always uses the smart-tier model for synthesis. -->
+              <button id="web-search-toggle" type="button" class="toggle-chip" aria-pressed="false" title="Allow the AI to search the web when it needs current info — answers cited from sources">
+                <svg viewBox="0 0 16 16" class="toggle-chip-icon" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.3"></circle>
+                  <ellipse cx="8" cy="8" rx="3" ry="6.3" fill="none" stroke="currentColor" stroke-width="1.3"></ellipse>
+                  <path d="M1.7 8H14.3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
+                </svg>
+                <span>Allow web</span>
+              </button>
+              <!-- Allow images (image GENERATION, admin-only). Mirrors the
+                   Allow-web toggle: when on, the agentic loop is offered a
+                   generate_image tool and the model creates an image when the
+                   user explicitly asks. Hidden unless image_gen_available
+                   (server returns true only for signed-in admins). -->
+              <button id="image-gen-toggle" type="button" class="toggle-chip" aria-pressed="false" hidden="" title="Let the AI generate an image when you ask it to (e.g. “draw a fox in a snowy forest”)">
+                <svg viewBox="0 0 16 16" class="toggle-chip-icon" aria-hidden="true">
+                  <rect x="1.7" y="2.7" width="12.6" height="10.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.3"></rect>
+                  <circle cx="5.4" cy="6.1" r="1.25" fill="currentColor"></circle>
+                  <path d="M2.4 12.2l3.4-3.4 2.5 2.5 2.3-2.3 2.7 2.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span>Allow images</span>
+              </button>
+              <!-- Attach image (vision). Opens the hidden #image-input file
+                   picker. Disabled + tooltip'd when vision_available is false
+                   (mirrors the Allow-web toggle's gating). -->
+              <button id="attach-btn" type="button" class="toggle-chip" aria-label="Attach image" title="Attach an image for the AI to read">
+                <svg viewBox="0 0 16 16" class="toggle-chip-icon" aria-hidden="true">
+                  <path d="M11.7 5.3L6.4 10.6a1.7 1.7 0 01-2.4-2.4l5.6-5.6a2.8 2.8 0 014 4l-5.8 5.8a4 4 0 01-5.6-5.6L8 1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span>Attach</span>
+              </button>
+            </div>
+            <button id="send-btn" type="submit" aria-label="Send" title="Send">
+              <svg viewBox="0 0 24 24" class="icon icon-send" aria-hidden="true">
+                <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <svg viewBox="0 0 24 24" class="icon icon-stop" aria-hidden="true">
+                <rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="currentColor"></rect>
+              </svg>
+            </button>
+          </div>
+        </form>
+        <div id="status" class="status" aria-live="polite"></div>
+      </div></div>
+
+        <div class="chips" id="chips" role="group" aria-label="Suggested prompts">
+          <button type="button" class="chip" data-prompt="Explain how transformers work, in plain English.">Explain how transformers work</button>
+          <button type="button" class="chip" data-prompt="Critique this product idea: a Chrome extension that auto-summarises long PRs into a 5-bullet TL;DR.">Critique a product idea</button>
+          <button type="button" class="chip" data-prompt="Draft 5 user-research interview questions about how designers handle feedback.">Draft research questions</button>
+          <button type="button" class="chip" data-prompt="Write a Python function that fetches a URL and returns the top three links from the page.">Write a short script</button>
+        </div>
+      </section>
+
+      <section id="messages" class="messages" aria-live="polite"></section>
+    </main>
+
+    <footer id="composer-slot-bottom" class="composer-slot composer-slot-bottom"></footer>
+
+    <!-- Composer (single instance, JS appends into whichever slot is active) -->
+    <template id="composer-template">
+      <div id="composer">
+        <div id="turnstile-container" class="turnstile-container" hidden=""></div>
+        <form id="compose" class="composer">
+          <!-- Staged-image thumbnails (vision). JS populates chips here above
+               the textarea; cleared after a successful send. Empty + hidden by
+               default so the text-only layout is unchanged. -->
+          <div id="image-strip" class="image-strip" hidden=""></div>
+          <textarea id="input" rows="1" placeholder="Ask anything…" maxlength="2000" autocomplete="off" spellcheck="true" required=""></textarea>
+          <!-- Hidden file input driving the 📎 attach button. accept=image/*,
+               multiple; wired in chat.js. -->
+          <input id="image-input" type="file" accept="image/*" multiple="" hidden="" aria-hidden="true" tabindex="-1">
+          <div class="composer-controls">
+            <div class="picker-group">
+              <!-- Mode picker. Custom popover (not <select>) so each row can
+                   carry a short description line. Fast/Balanced/Smart map to
+                   server-side Auto modes; Think maps to an explicit pick of
+                   the reasoning model. See chat.js → MODES. -->
+              <div class="picker mode-picker-wrap">
+                <button id="mode-picker" type="button" class="mode-picker-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Mode">
+                  <span class="mode-picker-current">Balanced</span>
+                </button>
+                <ul id="mode-picker-menu" class="mode-picker-menu" role="listbox" aria-label="Mode" hidden=""></ul>
+              </div>
+              <!-- Web search toggle. When on, the server runs the research
+                   fan-out chain (planner → search × N → synthesizer) instead
+                   of a single LLM call. Overrides the mode picker — research
+                   mode always uses the smart-tier model for synthesis. -->
+              <button id="web-search-toggle" type="button" class="toggle-chip" aria-pressed="false" title="Allow the AI to search the web when it needs current info — answers cited from sources">
+                <svg viewBox="0 0 16 16" class="toggle-chip-icon" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.3"></circle>
+                  <ellipse cx="8" cy="8" rx="3" ry="6.3" fill="none" stroke="currentColor" stroke-width="1.3"></ellipse>
+                  <path d="M1.7 8H14.3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
+                </svg>
+                <span>Allow web</span>
+              </button>
+              <!-- Allow images (image GENERATION, admin-only). Mirrors the
+                   Allow-web toggle: when on, the agentic loop is offered a
+                   generate_image tool and the model creates an image when the
+                   user explicitly asks. Hidden unless image_gen_available
+                   (server returns true only for signed-in admins). -->
+              <button id="image-gen-toggle" type="button" class="toggle-chip" aria-pressed="false" hidden="" title="Let the AI generate an image when you ask it to (e.g. “draw a fox in a snowy forest”)">
+                <svg viewBox="0 0 16 16" class="toggle-chip-icon" aria-hidden="true">
+                  <rect x="1.7" y="2.7" width="12.6" height="10.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.3"></rect>
+                  <circle cx="5.4" cy="6.1" r="1.25" fill="currentColor"></circle>
+                  <path d="M2.4 12.2l3.4-3.4 2.5 2.5 2.3-2.3 2.7 2.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span>Allow images</span>
+              </button>
+              <!-- Attach image (vision). Opens the hidden #image-input file
+                   picker. Disabled + tooltip'd when vision_available is false
+                   (mirrors the Allow-web toggle's gating). -->
+              <button id="attach-btn" type="button" class="toggle-chip" aria-label="Attach image" title="Attach an image for the AI to read">
+                <svg viewBox="0 0 16 16" class="toggle-chip-icon" aria-hidden="true">
+                  <path d="M11.7 5.3L6.4 10.6a1.7 1.7 0 01-2.4-2.4l5.6-5.6a2.8 2.8 0 014 4l-5.8 5.8a4 4 0 01-5.6-5.6L8 1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span>Attach</span>
+              </button>
+            </div>
+            <button id="send-btn" type="submit" aria-label="Send">
+              <svg viewBox="0 0 24 24" class="icon icon-send" aria-hidden="true">
+                <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <svg viewBox="0 0 24 24" class="icon icon-stop" aria-hidden="true">
+                <rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="currentColor"></rect>
+              </svg>
+            </button>
+          </div>
+        </form>
+        <div id="status" class="status" aria-live="polite"></div>
+      </div>
+    </template>
+
+    <footer id="page-footnote" class="page-footnote">
+      Made by <a href="https://rippledesign.co">Ripple Design</a>. Conversations are never saved.
+    </footer>
+
+    <!-- Drag-and-drop image overlay (vision). chat.js un-hides this while an
+         image file is dragged over the window; dropping anywhere — or pasting
+         from the clipboard — attaches it. pointer-events:none so it never
+         interferes with the underlying drop target. -->
+    <div id="drop-overlay" class="drop-overlay" hidden="" aria-hidden="true">
+      <div class="drop-overlay-inner">
+        <svg viewBox="0 0 24 24" class="drop-overlay-icon" aria-hidden="true">
+          <path d="M12 16V4M7 9l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>Drop image to attach</span>
+      </div>
+    </div>
+
+    <!-- Order matters: sidebar.js first (mounts the chrome), then convList.js
+         (defines RippleConvList used by chat.js), then chat.js. All defer
+         scripts execute in order. -->
+    <script src="/shared/sidebar.js?v=1787055626004" defer=""></script>
+    <script src="/shared/convList.js?v=1787055626004" defer=""></script>
+    <script src="/chat.js?v=1787055626004" defer=""></script>
+  
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true" style="visibility: visible !important;"></grammarly-desktop-integration></html>
