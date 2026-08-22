@@ -1159,10 +1159,7 @@ footer{
 #myImage {
   width: 400px;
   height: 300px;
-  object-fit: cover;
-  opacity:1;
-  transition: opacity 0.3s ease;
-   
+  object-fit: cover; 
 }
 
 
@@ -2334,13 +2331,8 @@ const images = ["Images/17.png", "Images/18.png"];
    const imgElement = document.getElementById("myImage");
 
    function switchImage() {
-      imgElement.style.opacity = "0";
-
-      setTimeout(() => {
-         currentIndex = (currentIndex+1) % images.length;
-         imgElement.src = images[currentIndex];
-         imgElement.style.opacity = "1";
-   },300);
+      currentIndex = (currentIndex+1) % images.length;
+      imgElement.src = images[currentIndex];
    }
 
    setInterval(switchImage, 3000);
