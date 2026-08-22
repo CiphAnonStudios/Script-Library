@@ -1160,6 +1160,9 @@ footer{
   width: 400px;
   height: 300px;
   object-fit: cover;
+  opacity:1;
+  transition: opacity 0.3s ease;
+   
 }
 
 
@@ -1196,7 +1199,7 @@ footer{
      <img class="Logo" src="Images/Logo.png">
 
      <!-- HTML -->
-<img id="myImage" src="" alt="Slideshow Image">
+<img id="myImage" src="Images/17.png" alt="Slideshow Image">
 
     <div class="nav-links">
 
@@ -2326,17 +2329,21 @@ renderScripts();
 ========================================================= */
 // JavaScript
 const images = ["Images/17.png", "Images/18.png"];
-let currentIndex = 0;
-const imgElement = document.getElementById("myImage");
 
-function switchImage() {
-  currentIndex = (currentIndex + 1) % images.length;
-  imgElement.src = images[currentIndex];
-}
+   let currentIndex = 0;
+   const imgElement = document.getElementById("myImage");
 
-// Switches every 3000 milliseconds (3 seconds)
-setInterval(switchImage, 500);
+   function switchImage() {
+      imgElement.style.opacity = "0";
 
+      setTimeout(() => {
+         currentIndex = (currentIndex+1) % images.length;
+         imgElement.src = images[currentIndex];
+         imgElement.style.opacity = "1";
+   },300);
+   }
+
+   setInterval(switchImage, 3000);
 
 
 </script>
